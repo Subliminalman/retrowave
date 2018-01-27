@@ -29,7 +29,6 @@ public class Player : NetworkBehaviour {
 		if (isLocalPlayer) {
 			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
-			gameObject.AddComponent<AudioListener> ();
 		}
 
 		RpcRespawn ();

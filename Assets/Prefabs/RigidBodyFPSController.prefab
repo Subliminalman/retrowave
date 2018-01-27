@@ -576,7 +576,9 @@ MonoBehaviour:
   reloadTime: 0.68
   maxAmmo: 30
   fireDistance: 50
-  fireSpread: 2.67
+  fireSpread: 0.2
+  hitscanHitPrefab: {fileID: 1316088296414572, guid: 089c395fe62094c29813bc0b16057718,
+    type: 2}
   reloadClip: {fileID: 0}
   bulletClips: []
 --- !u!114 &114622495599359490

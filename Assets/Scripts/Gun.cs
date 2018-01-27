@@ -34,6 +34,9 @@ public class Gun : NetworkBehaviour {
 	float fireSpread;
 
 	[SerializeField]
+	GameObject hitscanHitPrefab;
+
+	[SerializeField]
 	AudioClip reloadClip;
 
 	[SerializeField]
@@ -68,13 +71,17 @@ public class Gun : NetworkBehaviour {
 	}
 
 	public virtual void Fire () {
+		Debug.Log ("Try Fire");
+
 		if (isReloading) {
 			return;
 		}
-
+			
 		if (currentFireRateTime > 0f) {
 			return;
 		}
+
+		Debug.Log ("SHOOT");
 
 		currentFireRateTime = fireRate;
 
@@ -109,7 +116,10 @@ public class Gun : NetworkBehaviour {
 			Player p = hit.transform.gameObject.GetComponent<Player> ();
 			if (p != null) {
 				p.TakeDamage (damage);
-			}				
+			}
+			Debug.Log ("HIT");
+			GameObject go = Instantiate<GameObject> (hitscanHitPrefab, hit.point + hit.normal, Quaternion.identity);
+			NetworkServer.Spawn (go);
 		}			
 	}
 
