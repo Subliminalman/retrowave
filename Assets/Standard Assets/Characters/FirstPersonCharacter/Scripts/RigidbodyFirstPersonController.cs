@@ -128,7 +128,7 @@ namespace UnityStandardAssets.Characters.FirstPerson {
 		[Command]
 		void CmdFire () {
 			GameObject bullet = Instantiate<GameObject> (bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-			bullet.GetComponent<Rigidbody>().velocity =  bullet.transform.forward * 6;
+			//bullet.GetComponent<Rigidbody>().velocity =  bullet.transform.forward * 6;
 			NetworkServer.Spawn (bullet);
 			Destroy (bullet, 2f);
 		}
@@ -137,15 +137,12 @@ namespace UnityStandardAssets.Characters.FirstPerson {
 			if (!isLocalPlayer) {
 				return;
 			}
+
 			RotateView ();
 
 			if (CrossPlatformInputManager.GetButtonDown ("Jump") && !m_Jump) {
 				m_Jump = true;
-			}
-
-			if (Input.GetMouseButtonDown (0)) {
-				CmdFire ();
-			}
+			}				
 		}
 
 
