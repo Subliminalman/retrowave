@@ -570,7 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGunType: 0
   fireOrigin: {fileID: 4937400726132688}
-  projectile: {fileID: 114931141729050126, guid: 7917900e1273841c29b3978abf175815,
+  projectile: {fileID: 114931141729050126, guid: e41503d91458644c8b5a58376093a2e0,
     type: 2}
   damage: 1
   fireRate: 0.14

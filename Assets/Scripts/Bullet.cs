@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
+    public int damage = 10;
     public float velocity = 100.0f;
 	Rigidbody rigid;
 
@@ -20,7 +21,7 @@ public class Bullet : MonoBehaviour {
 		var hit = _col.gameObject;
 		var health = hit.GetComponent<Player>();
 		if (health != null) {
-			health.TakeDamage(10);
+			health.TakeDamage(damage);
 		}
 		Destroy (gameObject);
 	}
