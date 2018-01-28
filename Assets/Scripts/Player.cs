@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+public class Player : TeamSetup {
 
 
 	public bool destroyOnDeath;
-    [SyncVar]
-	public int currentTeam = 1;
 	public const int maxHealth = 100;
 
 	[SyncVar(hook = "OnChangeHealth")]
@@ -26,7 +24,7 @@ public class Player : NetworkBehaviour {
 	[SerializeField] 
 	Gun gun;
 
-	void Start () {
+	protected override void Start () {
 		if (isLocalPlayer) {
 		    spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
@@ -34,7 +32,10 @@ public class Player : NetworkBehaviour {
 
         if (NetworkServer.active) {
 		    RpcRespawn ();
+            Spawn (currentTeam);
         }
+
+        base.Start ();
 	}
 
 	void Update () {
@@ -59,7 +60,10 @@ public class Player : NetworkBehaviour {
 				Destroy (gameObject);
 			} else {
 				currentHealth = 0;
-				RpcRespawn ();
+                if (NetworkServer.active) {
+				    RpcRespawn ();
+                    Spawn (currentTeam);
+                } 
 			}
 		}
 	}
@@ -90,11 +94,12 @@ public class Player : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcRespawn () {
-		RpcSpawn (currentTeam);
+        if (!NetworkServer.active) {
+		    Spawn (currentTeam);
+        }
 	}
 
-	[ClientRpc]
-	void RpcSpawn (int _teamIndex) {
+	void Spawn (int _teamIndex) {
 		gun.Reset ();
 		currentAmmo = gun.MaxAmmo;
 		currentHealth = maxHealth;

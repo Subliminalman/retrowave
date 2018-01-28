@@ -582,6 +582,9 @@ MonoBehaviour:
     type: 2}
   reloadClip: {fileID: 0}
   bulletClips: []
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 1536
 --- !u!114 &114622495599359490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -593,8 +596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d530126c239045f7b59c012f8cbb033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnDeath: 0
   currentTeam: 1
+  destroyOnDeath: 0
   hud: {fileID: 0}
   gun: {fileID: 114322073918289516}
 --- !u!114 &114678881305595030

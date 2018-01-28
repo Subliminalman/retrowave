@@ -45,8 +45,9 @@ public class Gun : NetworkBehaviour {
 	bool isReloading = false;
 	int currentAmmo;
 	float currentFireRateTime;
-	string hitLayer = "Hit";
+	public LayerMask hitMask;
 	AudioPoolManager audioPool;
+    private Player attachedPlayer;
 
 	public int CurrentAmmo {
 		get { return currentAmmo; }
@@ -58,6 +59,7 @@ public class Gun : NetworkBehaviour {
 		
 	void Awake () {
 		Reset ();
+        attachedPlayer = GetComponent<Player> ();
 	}
 
 	void FixedUpdate () {
@@ -112,12 +114,14 @@ public class Gun : NetworkBehaviour {
 	protected virtual void CmdHitScan () {
 		RaycastHit hit;
 		Vector3 spread = (Random.insideUnitCircle * fireSpread);
-		if (Physics.Raycast (fireOrigin.position, fireOrigin.forward + spread, out hit, fireDistance, 1 << LayerMask.NameToLayer (hitLayer))) {
+		if (Physics.Raycast (fireOrigin.position, fireOrigin.forward + spread, out hit, fireDistance, hitMask)) {
 			Player p = hit.transform.gameObject.GetComponent<Player> ();
-			if (p != null) {
-				p.TakeDamage (damage);
+			if (p == null || p.currentTeam == attachedPlayer.currentTeam) {
+                // No hit
+                return;
 			}
 			Debug.Log ("HIT");
+			p.TakeDamage (damage);
 			GameObject go = Instantiate<GameObject> (hitscanHitPrefab, hit.point + hit.normal, Quaternion.identity);
 			NetworkServer.Spawn (go);
 		}			
@@ -130,6 +134,7 @@ public class Gun : NetworkBehaviour {
 		}
 
 		Bullet b = Instantiate<Bullet> (projectile, fireOrigin.position, fireOrigin.rotation);
+        b.currentTeam = attachedPlayer.currentTeam;
 		b.Shoot ();
 		NetworkServer.Spawn (b.gameObject);
 	}
