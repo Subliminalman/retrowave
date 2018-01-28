@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Bullet : MonoBehaviour {
-
+public class Bullet : TeamSetup {
+    public int damage = 10;
     public float velocity = 100.0f;
 	Rigidbody rigid;
+
 
 	public virtual void Shoot () {
         rigid = GetComponent<Rigidbody> ();
@@ -19,8 +21,8 @@ public class Bullet : MonoBehaviour {
 
 		var hit = _col.gameObject;
 		var health = hit.GetComponent<Player>();
-		if (health != null) {
-			health.TakeDamage(10);
+		if (health != null && health.currentTeam != currentTeam) {
+			health.TakeDamage(damage);
 		}
 		Destroy (gameObject);
 	}
