@@ -27,57 +27,84 @@ public class Player : TeamSetup {
 	[SerializeField]
 	Transform shootTransform;
 
+	[SerializeField]
+	Renderer skin;
+	[SerializeField]
+	GameObject glasses;
+
     [SyncVar]
 	public bool hasBall = false;
 
     [SyncVar]
 	bool canFire = true;
 
+	[SerializeField]
+	GameObject gunObj, ballObj;
 
 	protected override void Start () {
 		if (isLocalPlayer) {
 			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
-			//TEMP
+			//TEMP AND BADDDDDDD!
 			playerId = Random.Range(0, 100000);
 		}
 
+		Spawn (currentTeam);
 		if (NetworkServer.active) {
 			RpcRespawn ();
 			Spawn (currentTeam);
 		}
 
+
 		base.Start ();
 	}
 
-	void Update () {
+	void Update () {		
+		gunObj.SetActive (hasBall == false);
+		ballObj.SetActive (hasBall);
+
 		if (!isLocalPlayer) {
 			return;
+		}			
+			
+		if (hud == null) {
+			hud = FindObjectOfType<HUD> ();
+			if (hud != null) {
+				hud.SetColor (currentTeam);
+				hud.SetCurrentHealth (maxHealth);
+				hud.SetMaxAmmo (gun.MaxAmmo);
+			}
+		} else {
+			hud.SetCurrentAmmo (gun.CurrentAmmo);
+			hud.SetMaxAmmo (gun.MaxAmmo);
+			hud.SetMaxHealth (100);
 		}
 
 		if (!canFire) {
 			return;
 		}
 
-		if (Input.GetMouseButton(0)) {
+		if (Input.GetMouseButton (0)) {
 			if (hasBall) {
 				//TODO: Set animation parameters
 				//TODO: If we have ball and die.... drop ball
 
-
-				Debug.Log ("SHOOT BALL");
-				ShootBall();
+				ShootBall ();
 
 			} else {				
 				gun.CmdFire ();
 			}
 		}			
 
-        if (Input.GetMouseButtonDown(1)) {
-            if (hasBall) {
-                DropBall ();
-            }
-        }
+		if (Input.GetMouseButtonDown (1)) {
+			if (hasBall) {
+				DropBall ();
+			}
+		}
+
+		if (transform.position.y < -10f) {
+			Kill (true);
+		}
 	}
 
 	public void TakeDamage (int _amount) {
@@ -88,49 +115,71 @@ public class Player : TeamSetup {
 		currentHealth -= _amount;
 		if (currentHealth <= 0) {
 			currentHealth = 0;
-			if (NetworkServer.active) {
-				RpcRespawn ();
-				Spawn (currentTeam);
-			} 
+			Kill ();
 		}
 	}
-		
+
+	void Kill (bool _resetBall = false) {
+		if (NetworkServer.active) {
+			RpcRespawn ();
+			Spawn (currentTeam);
+
+			if (hasBall) {
+				if (_resetBall) {
+					GameplayManager.Singleton.ResetBall ();
+				} else {
+					GameplayManager.Singleton.DropBall (transform.position);
+				}
+			}
+		} 
+	}
+
 	void OnChangeHealth (int _currentHealth) {
 		if (isLocalPlayer) {
-			hud.SetCurrentHealth (_currentHealth);
-			hud.SetMaxAmmo (gun.MaxAmmo);
+			if (hud == null) {
+				hud = FindObjectOfType<HUD> ();
+			}
+
+			if (hud != null) {
+				hud.SetColor (currentTeam);
+				hud.SetCurrentHealth (_currentHealth);
+				hud.SetMaxAmmo (gun.MaxAmmo);
+			} 
+
 		}
 	}
 
 	void OnChangeAmmo (int _currentAmmo) {
 		if (isLocalPlayer) {
-			hud.SetCurrentAmmo (_currentAmmo);
-			hud.SetMaxHealth (maxHealth);
+			if (hud != null) {
+				hud.SetCurrentAmmo (_currentAmmo);
+				hud.SetMaxHealth (maxHealth);
+			}
 		}
 	}
 
 	void ShootBall () {
-        CmdShootBall ();
-        // Do this local so we don't try to shoot next update loop (server will sync the values back to us soon)
+		CmdShootBall ();
+		// Do this local so we don't try to shoot next update loop (server will sync the values back to us soon)
 		hasBall = false;
 		canFire = false;
 	}
 
     [Command] 
     void CmdShootBall () {
-        if (!hasBall || !canFire) {
-            Debug.LogError ("Client is cheating!");
-            return;
-        }
+		if (!hasBall || !canFire) {
+			Debug.LogError ("Client is cheating!");
+			return;
+		}
 
-        // Synced version, server will set these on all remotes
-        hasBall = false;
-        canFire = false;
+		// Synced version, server will set these on all remotes
+		hasBall = false;
+		canFire = false;
 
 		GameplayManager.Singleton.ShootBall (shootTransform.position + shootTransform.forward * 1.5f, shootTransform.forward);
 
 		StartCoroutine (WaitAndCanFire ());
-    }
+	}
 
     [Server]
 	IEnumerator WaitAndCanFire () {
@@ -177,14 +226,32 @@ public class Player : TeamSetup {
 			currentHealth = maxHealth;		
 		}
 
+
+		glasses.SetActive (!isLocalPlayer);
+
+		if (hud == null) {
+			hud = FindObjectOfType<HUD> ();
+		}
+
+		if (hud != null) {
+			hud.SetColor (currentTeam);
+			hud.SetCurrentHealth (maxHealth);
+			hud.SetMaxAmmo (gun.MaxAmmo);
+		}
+
+		skin.material.color = _teamIndex == 0 ? Color.magenta : Color.cyan;
+
 		if (isLocalPlayer) {
 			Vector3 spawnPoint = new Vector3 (0f, 0f, -5f);
+			Vector3 spawnRotation = Vector3.zero;
 
 			if (spawnPoints != null && spawnPoints.Length > 0) {
 				spawnPoint = spawnPoints [_teamIndex].transform.position;
+				spawnRotation = spawnPoints [_teamIndex].transform.rotation.eulerAngles;
 			}
 
-			transform.position = spawnPoint;
+			transform.position = spawnPoint + Vector3.up * 1.5f;
+			transform.rotation = Quaternion.Euler (spawnRotation);
 		}
 	}		
 }

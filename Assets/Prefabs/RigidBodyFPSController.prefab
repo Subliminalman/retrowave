@@ -53,6 +53,7 @@ Transform:
   m_Children:
   - {fileID: 4813206521120304}
   - {fileID: 4937400726132688}
+  - {fileID: 4291410173993440}
   m_Father: {fileID: 400002}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63,7 +64,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
-  m_LocalPosition: {x: 0, y: 1.35, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -95,7 +96,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967293
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -142,12 +143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 2000000}
   movementSettings:
-    ForwardSpeed: 8
-    BackwardSpeed: 4
-    StrafeSpeed: 4
-    RunMultiplier: 2
-    RunKey: 304
-    JumpForce: 50
+    ForwardSpeed: 10
+    BackwardSpeed: 7
+    StrafeSpeed: 8
+    RunMultiplier: 1
+    RunKey: 0
+    JumpForce: 60
     SlopeCurveModifier:
       serializedVersion: 2
       m_Curve:
@@ -158,7 +159,7 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
-        time: 0
+        time: 43.5
         value: 1
         inSlope: 0
         outSlope: 0
@@ -166,12 +167,12 @@ MonoBehaviour:
       - serializedVersion: 2
         time: 90
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.013095237
+        outSlope: -0.013095237
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
     CurrentTargetSpeed: 8
   mouseLook:
     XSensitivity: 2
@@ -185,7 +186,7 @@ MonoBehaviour:
   advancedSettings:
     groundCheckDistance: 0.1
     stickToGroundHelperDistance: 0.6
-    slowDownRate: 20
+    slowDownRate: 10
     airControl: 0
     shellOffset: 0
   bulletPrefab: {fileID: 1310387858185340, guid: 7917900e1273841c29b3978abf175815,
@@ -205,8 +206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 2000000}
   motionBob:
-    HorizontalBobRange: 0.1
-    VerticalBobRange: 0.05
+    HorizontalBobRange: 0.01
+    VerticalBobRange: 0.005
     Bobcurve:
       serializedVersion: 2
       m_Curve:
@@ -249,7 +250,7 @@ MonoBehaviour:
     BobAmount: 0.2
   rigidbodyFirstPersonController: {fileID: 11400004}
   StrideInterval: 4
-  RunningStrideLengthen: 0.722
+  RunningStrideLengthen: 0.911
 --- !u!124 &12410568
 Behaviour:
   m_ObjectHideFlags: 1
@@ -307,7 +308,7 @@ GameObject:
   - component: {fileID: 33042253113535794}
   - component: {fileID: 65001118517233326}
   - component: {fileID: 23412895737160972}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,6 +349,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1941247599830652
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4291410173993440}
+  - component: {fileID: 33924103930492502}
+  - component: {fileID: 135878484417357232}
+  - component: {fileID: 23362947641346054}
+  m_Layer: 0
+  m_Name: Ball
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4170017369026626
 Transform:
   m_ObjectHideFlags: 1
@@ -360,6 +379,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4820498017757814}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4291410173993440
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941247599830652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.48, y: -0.205, z: 0.648}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_Children: []
+  m_Father: {fileID: 400000}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4813206521120304
 Transform:
@@ -401,6 +433,40 @@ Transform:
   m_Father: {fileID: 400000}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 180, y: 180, z: -180}
+--- !u!23 &23362947641346054
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941247599830652}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!23 &23412895737160972
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -524,6 +590,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1762178875035066}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &33924103930492502
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941247599830652}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &65001118517233326
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -549,7 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
   m_SendInterval: 0.1
-  m_SyncRotationAxis: 2
+  m_SyncRotationAxis: 4
   m_RotationSyncCompression: 0
   m_SyncSpin: 1
   m_MovementTheshold: 0.001
@@ -572,16 +645,18 @@ MonoBehaviour:
   fireOrigin: {fileID: 4937400726132688}
   projectile: {fileID: 114931141729050126, guid: e41503d91458644c8b5a58376093a2e0,
     type: 2}
-  damage: 1
-  fireRate: 0.14
-  reloadTime: 0.68
-  maxAmmo: 30
+  damage: 10
+  fireRate: 0.9
+  reloadTime: 0.97
+  maxAmmo: 10
   fireDistance: 50
   fireSpread: 0.2
   hitscanHitPrefab: {fileID: 1316088296414572, guid: 089c395fe62094c29813bc0b16057718,
     type: 2}
   reloadClip: {fileID: 0}
   bulletClips: []
+  anim: {fileID: 0}
+  render: {fileID: 23979384819485842}
   hitMask:
     serializedVersion: 2
     m_Bits: 5632
@@ -601,7 +676,11 @@ MonoBehaviour:
   hud: {fileID: 0}
   gun: {fileID: 114322073918289516}
   shootTransform: {fileID: 4937400726132688}
+  skin: {fileID: 23465955320891428}
+  glasses: {fileID: 1160849909890894}
   hasBall: 0
+  gunObj: {fileID: 1762178875035066}
+  ballObj: {fileID: 1941247599830652}
 --- !u!114 &114678881305595030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -634,3 +713,15 @@ MonoBehaviour:
     i15: 66
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!135 &135878484417357232
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1941247599830652}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

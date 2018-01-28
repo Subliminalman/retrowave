@@ -42,6 +42,12 @@ public class Gun : NetworkBehaviour {
 	[SerializeField]
 	AudioClip[] bulletClips;
 
+	[SerializeField]
+	Animator anim;
+
+	[SerializeField]
+	Renderer render;
+
 	bool isReloading = false;
 	int currentAmmo;
 	float currentFireRateTime;
@@ -91,8 +97,6 @@ public class Gun : NetworkBehaviour {
 			return;
 		}
 
-		Debug.Log ("SHOOT");
-
 		currentFireRateTime = fireRate;
 
 		if (currentGunType == GunType.HitScan) {
@@ -110,12 +114,21 @@ public class Gun : NetworkBehaviour {
 		
 	protected virtual void Reload () {
 		//Play animation here
-		FinishedReloading ();	
+		StartCoroutine(WaitAndFinishReloading());
+	}
+
+	IEnumerator WaitAndFinishReloading () {
+		//Temp
+		render.enabled = false;
+
+		yield return new WaitForSeconds (reloadTime);
+		FinishedReloading ();
 	}
 
 	protected virtual void FinishedReloading () {
 		currentAmmo = maxAmmo;
 		currentFireRateTime = 0f;
+		render.enabled = true;
 	}
 		
 	protected virtual void HitScan () {
@@ -142,8 +155,8 @@ public class Gun : NetworkBehaviour {
 		}
 
 		Bullet b = Instantiate<Bullet> (projectile, fireOrigin.position, fireOrigin.rotation);
-        b.currentTeam = attachedPlayer.currentTeam;
-		b.Shoot ();
+		b.currentTeam = attachedPlayer.currentTeam;
+		b.Shoot (fireOrigin.forward);
 		NetworkServer.Spawn (b.gameObject);
 	}
 

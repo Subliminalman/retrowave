@@ -18,7 +18,13 @@ public class Ball : NetworkBehaviour {
 	void Awake () {
 		rigid = GetComponent<Rigidbody> ();
 	}
-		
+
+	void Update () {
+		if (transform.position.y < -10f) {
+			GameplayManager.Singleton.ResetBall ();
+		}
+	}
+
 	public void Shoot (Vector3 _position, Vector3 _rotation) {
         RpcShoot (_position, _rotation);
         LocalShoot (_position, _rotation);
@@ -55,19 +61,29 @@ public class Ball : NetworkBehaviour {
 		transform.position = _position;
 		rigid.velocity = Vector3.zero;
 		gameObject.SetActive (true);
-		rigid.AddForce(Vector3.up * resetForce);
+	}
+
+	public void DisableBall () {
+		RpcDisableBall ();
+		LocalDisableBall ();
+	}
+
+	private void LocalDisableBall () {
+		gameObject.SetActive (false);	
 	}
 
     [ClientRpc]
     private void RpcDisableBall () {
-        gameObject.SetActive (false);
+		if (!NetworkServer.active) {
+			DisableBall ();
+		}
     }
 
 	void OnCollisionEnter (Collision _col) {
-        if (!NetworkServer.active || !gameObject.activeSelf) {
-            // Let the server decided which collision worked (first one sets active false)
-            return;
-        }
+		if (!NetworkServer.active || !gameObject.activeSelf) {
+			// Let the server decided which collision worked (first one sets active false)
+			return;
+		}
 
 		if (_col.transform.CompareTag ("Player")) {
 			Player p = _col.gameObject.GetComponent<Player> ();
@@ -77,7 +93,7 @@ public class Ball : NetworkBehaviour {
 				//Give player Ball state
 				//Tell game manager which player has ball so it doesn't respawn ball
 				p.GiveBall ();
-                RpcDisableBall ();
+				RpcDisableBall ();
 				gameObject.SetActive (false);
 			}
 		}
