@@ -28,13 +28,13 @@ public class Player : NetworkBehaviour {
 
 	void Start () {
 		if (isLocalPlayer) {
-		    spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
+			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
 		}
 
-        if (NetworkServer.active) {
-		    RpcRespawn ();
-        }
+		if (NetworkServer.active) {
+			RpcRespawn ();
+		}
 	}
 
 	void Update () {
@@ -81,6 +81,7 @@ public class Player : NetworkBehaviour {
 	[ClientRpc]
 	public void RpcGiveBall () {
 		//Put player into has ball state
+		GameManager.Singleton.GiveBall(this);
 	}
 
 	[ClientRpc]

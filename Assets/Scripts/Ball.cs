@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class Ball : NetworkBehaviour {
 
@@ -18,9 +19,17 @@ public class Ball : NetworkBehaviour {
 	void OnEnable () {
 		if (Singleton == null) {
 			Singleton = this;
+			SceneManager.sceneUnloaded += SceneUnloaded;
 		} else {
 			Destroy (gameObject);
 		}
+	}
+
+	void SceneUnloaded (Scene arg0) {
+		if (Singleton == this) {
+			Singleton = null;
+		}
+		SceneManager.sceneUnloaded -= SceneUnloaded;
 	}
 
 	void OnApplicationQuit () {
