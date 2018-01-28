@@ -18,8 +18,11 @@ public class Ball : NetworkBehaviour {
 	void Awake () {
 		rigid = GetComponent<Rigidbody> ();
 	}
+		
 
-	public void Shoot (Vector3 _position, Vector3 _rotation) {
+
+	[ClientRpc]
+	public void RpcShoot (Vector3 _position, Vector3 _rotation) {
 		gameObject.SetActive (true);
 		transform.position = _position;
 		transform.rotation = Quaternion.Euler (_rotation);
@@ -42,7 +45,7 @@ public class Ball : NetworkBehaviour {
 				//Hide ball
 				//Give player Ball state
 				//Tell game manager which player has ball so it doesn't respawn ball
-				p.RpcGiveBall ();
+				p.GiveBall ();
 				gameObject.SetActive (false);
 			}
 		}

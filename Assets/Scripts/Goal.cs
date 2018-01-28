@@ -9,10 +9,12 @@ public class Goal : NetworkBehaviour {
 	int teamId = 0;
 
 	void OnTriggerEnter (Collider _col) {
-		Ball b = _col.transform.GetComponent<Ball> ();
+		//Ball b = _col.transform.GetComponent<Ball> ();
 
-		if (b != null) {
+		//if (b != null) {
 			//GameplayManager.Singleton.Score (teamId);		
-		}
+
+			Debug.Log ("GOALLLLLLLLL");
+		//}
 	}
 }

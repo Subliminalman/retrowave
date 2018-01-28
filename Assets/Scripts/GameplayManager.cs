@@ -80,7 +80,7 @@ public class GameplayManager : NetworkBehaviour {
 			Debug.LogError ("BALL IS NULL");
 			ball = Instantiate<Ball> (ballPrefab, Vector3.zero, Quaternion.identity);
 		}
-		ball.Shoot (_position, _rotation);
+		ball.RpcShoot (_position, _rotation);
 	}
 
 	[Command]

@@ -27,6 +27,7 @@ public class Player : TeamSetup {
 	[SerializeField]
 	Transform shootTransform;
 
+	[SyncVar]
 	public bool hasBall = false;
 	bool canFire = true;
 
@@ -35,6 +36,8 @@ public class Player : TeamSetup {
 		if (isLocalPlayer) {
 			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
+			//TEMP
+			playerId = Random.Range(0, 100000);
 		}
 
 		if (NetworkServer.active) {
@@ -58,6 +61,9 @@ public class Player : TeamSetup {
 			if (hasBall) {
 				//TODO: Set animation parameters
 				//TODO: If we have ball and die.... drop ball
+
+
+				Debug.Log ("SHOOT BALL");
 				ShootBall();
 
 			} else {				
@@ -107,9 +113,8 @@ public class Player : TeamSetup {
 		yield return new WaitForSeconds (1f);
 		canFire = true;
 	}
-
-	[ClientRpc]
-	public void RpcGiveBall () {
+		
+	public void GiveBall () {
 		//Put player into has ball state
 		GameplayManager.Singleton.CmdGiveBall (playerId);
 	}
@@ -138,7 +143,7 @@ public class Player : TeamSetup {
 		}
 
 		if (isLocalPlayer) {
-			Vector3 spawnPoint = Vector3.zero;
+			Vector3 spawnPoint = new Vector3 (0f, 0f, -5f);
 
 			if (spawnPoints != null && spawnPoints.Length > 0) {
 				spawnPoint = spawnPoints [_teamIndex].transform.position;
