@@ -34,6 +34,8 @@ GameObject:
   - component: {fileID: 114076597704285924}
   - component: {fileID: 114622495599359490}
   - component: {fileID: 114322073918289516}
+  - component: {fileID: 114672380917746484}
+  - component: {fileID: 114159900418495332}
   m_Layer: 0
   m_Name: RigidBodyFPSController
   m_TagString: Player
@@ -630,6 +632,25 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 0
   m_InterpolateMovement: 1
+--- !u!114 &114159900418495332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 400000}
+  m_ChildIndex: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0
+  m_InterpolateMovement: 0.5
 --- !u!114 &114322073918289516
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -681,6 +702,25 @@ MonoBehaviour:
   hasBall: 0
   gunObj: {fileID: 1762178875035066}
   ballObj: {fileID: 1941247599830652}
+--- !u!114 &114672380917746484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4937400726132688}
+  m_ChildIndex: 0
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114678881305595030
 MonoBehaviour:
   m_ObjectHideFlags: 1
