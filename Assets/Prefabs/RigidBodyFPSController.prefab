@@ -568,9 +568,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad40873ac6b94c64915d880a9f68d0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGunType: 1
+  currentGunType: 0
   fireOrigin: {fileID: 4937400726132688}
-  projectile: {fileID: 0}
+  projectile: {fileID: 114931141729050126, guid: 7917900e1273841c29b3978abf175815,
+    type: 2}
   damage: 1
   fireRate: 0.14
   reloadTime: 0.68

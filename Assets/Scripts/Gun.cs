@@ -129,7 +129,7 @@ public class Gun : NetworkBehaviour {
 			return;
 		}
 
-		Bullet b = Instantiate<Bullet> (projectile, fireOrigin.position, Quaternion.Euler (fireOrigin.forward));
+		Bullet b = Instantiate<Bullet> (projectile, fireOrigin.position, fireOrigin.rotation);
 		b.Shoot ();
 		NetworkServer.Spawn (b.gameObject);
 	}
