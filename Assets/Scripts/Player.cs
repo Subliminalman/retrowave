@@ -85,7 +85,7 @@ public class Player : TeamSetup {
 	[ClientRpc]
 	public void RpcGiveBall () {
 		//Put player into has ball state
-		GameManager.Singleton.GiveBall(this);
+		GameManager.Singleton.CmdGiveBall(this);
 	}
 
 	[ClientRpc]

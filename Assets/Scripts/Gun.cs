@@ -59,7 +59,7 @@ public class Gun : NetworkBehaviour {
 		
 	void Awake () {
 		Reset ();
-        attachedPlayer = GetComponent<Player> ();
+		attachedPlayer = GetComponent<Player> ();
 	}
 
 	void FixedUpdate () {
@@ -70,6 +70,9 @@ public class Gun : NetworkBehaviour {
 	public void Reset () {
 		currentAmmo = maxAmmo;
 		currentFireRateTime = fireRate;
+
+		int teamLayer = 1 << gameObject.layer;
+		hitMask &= ~teamLayer;			
 	}
 
 	public virtual void Fire () {

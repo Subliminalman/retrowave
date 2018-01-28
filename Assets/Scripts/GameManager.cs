@@ -36,7 +36,7 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	[Command]
-	public void GiveBall (Player _player) {
+	public void CmdGiveBall (Player _player) {
 		
 
 	}
