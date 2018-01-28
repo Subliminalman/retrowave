@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 114322073918289516}
   m_Layer: 0
   m_Name: RigidBodyFPSController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -597,9 +597,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTeam: 1
-  destroyOnDeath: 0
+  playerId: -1
   hud: {fileID: 0}
   gun: {fileID: 114322073918289516}
+  hasBall: 0
 --- !u!114 &114678881305595030
 MonoBehaviour:
   m_ObjectHideFlags: 1

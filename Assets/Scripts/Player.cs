@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class Player : TeamSetup {
 
 
-	public bool destroyOnDeath;
+
 	public const int maxHealth = 100;
 
 	[SyncVar(hook = "OnChangeHealth")]
@@ -15,6 +15,8 @@ public class Player : TeamSetup {
 
 	[SyncVar(hook = "OnChangeAmmo")]
 	int currentAmmo = 0;
+
+	public int playerId = -1;
 
 	private NetworkStartPosition[] spawnPoints;
 
@@ -24,18 +26,20 @@ public class Player : TeamSetup {
 	[SerializeField] 
 	Gun gun;
 
+	public bool hasBall = false;
+
 	protected override void Start () {
 		if (isLocalPlayer) {
 			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
 		}
 
-        if (NetworkServer.active) {
-		    RpcRespawn ();
-            Spawn (currentTeam);
-        }
+		if (NetworkServer.active) {
+			RpcRespawn ();
+			Spawn (currentTeam);
+		}
 
-        base.Start ();
+		base.Start ();
 	}
 
 	void Update () {
@@ -44,7 +48,7 @@ public class Player : TeamSetup {
 		}
 
 		if (Input.GetMouseButton(0)) {
-			gun.Fire ();
+			gun.CmdFire ();
 		}			
 	}
 
@@ -55,16 +59,11 @@ public class Player : TeamSetup {
 
 		currentHealth -= _amount;
 		if (currentHealth <= 0) {
-
-			if (destroyOnDeath) {
-				Destroy (gameObject);
-			} else {
-				currentHealth = 0;
-                if (NetworkServer.active) {
-				    RpcRespawn ();
-                    Spawn (currentTeam);
-                } 
-			}
+			currentHealth = 0;
+			if (NetworkServer.active) {
+				RpcRespawn ();
+				Spawn (currentTeam);
+			} 
 		}
 	}
 		
@@ -85,16 +84,19 @@ public class Player : TeamSetup {
 	[ClientRpc]
 	public void RpcGiveBall () {
 		//Put player into has ball state
-		GameManager.Singleton.CmdGiveBall(this);
+		GameplayManager.Singleton.CmdGiveBall(playerId);
 	}
 
 	[ClientRpc]
 	public void RpcDropBall () {
 		//call ball to drop at player position
+		if (hasBall) {
+			GameplayManager.Singleton.CmdDropBall (transform.position);
+		}
 	}
 
 	[ClientRpc]
-	void RpcRespawn () {
+	public void RpcRespawn () {
         if (!NetworkServer.active) {
 		    Spawn (currentTeam);
         }
@@ -102,8 +104,11 @@ public class Player : TeamSetup {
 
 	void Spawn (int _teamIndex) {
 		gun.Reset ();
-		currentAmmo = gun.MaxAmmo;
-		currentHealth = maxHealth;
+
+		if (isServer) {
+			currentAmmo = gun.MaxAmmo;
+			currentHealth = maxHealth;
+		}
 
 		if (isLocalPlayer) {
 			Vector3 spawnPoint = Vector3.zero;
@@ -113,8 +118,6 @@ public class Player : TeamSetup {
 			}
 
 			transform.position = spawnPoint;
-
-			currentHealth = maxHealth;
 		}
 	}		
 }

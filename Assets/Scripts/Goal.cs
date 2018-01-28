@@ -12,7 +12,7 @@ public class Goal : NetworkBehaviour {
 		Ball b = _col.transform.GetComponent<Ball> ();
 
 		if (b != null) {
-			GameManager.Singleton.Score (teamId);		
+			//GameplayManager.Singleton.Score (teamId);		
 		}
 	}
 }

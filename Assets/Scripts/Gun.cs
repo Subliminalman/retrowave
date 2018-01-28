@@ -75,7 +75,8 @@ public class Gun : NetworkBehaviour {
 		hitMask &= ~teamLayer;			
 	}
 
-	public virtual void Fire () {
+	[Command]
+	public void CmdFire () {
 		Debug.Log ("Try Fire");
 
 		if (isReloading) {
@@ -91,9 +92,9 @@ public class Gun : NetworkBehaviour {
 		currentFireRateTime = fireRate;
 
 		if (currentGunType == GunType.HitScan) {
-			CmdHitScan ();
+			HitScan ();
 		} else if (currentGunType == GunType.Projectile) {
-			CmdProjectileShoot ();
+			ProjectileShoot ();
 		}
 
 		--currentAmmo;
@@ -112,26 +113,26 @@ public class Gun : NetworkBehaviour {
 		currentAmmo = maxAmmo;
 		currentFireRateTime = 0f;
 	}
-
-	[Command]
-	protected virtual void CmdHitScan () {
+		
+	protected virtual void HitScan () {
 		RaycastHit hit;
 		Vector3 spread = (Random.insideUnitCircle * fireSpread);
 		if (Physics.Raycast (fireOrigin.position, fireOrigin.forward + spread, out hit, fireDistance, hitMask)) {
 			Player p = hit.transform.gameObject.GetComponent<Player> ();
-			if (p == null || p.currentTeam == attachedPlayer.currentTeam) {
+			//if (p == null || p.currentTeam == attachedPlayer.currentTeam) {
                 // No hit
-                return;
-			}
+                //return;
+			//}
 			Debug.Log ("HIT");
-			p.TakeDamage (damage);
+			if (p != null) {
+				p.TakeDamage (damage);
+			}
 			GameObject go = Instantiate<GameObject> (hitscanHitPrefab, hit.point + hit.normal, Quaternion.identity);
 			NetworkServer.Spawn (go);
 		}			
 	}
 
-	[Command]
-	protected virtual void CmdProjectileShoot () {
+	protected virtual void ProjectileShoot () {
 		if (projectile == null) {
 			return;
 		}

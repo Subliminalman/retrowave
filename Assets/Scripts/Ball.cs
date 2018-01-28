@@ -13,32 +13,7 @@ public class Ball : NetworkBehaviour {
 	Renderer renderer;
 	Collider col;
 
-	static Ball Singleton;
-
-
-	void OnEnable () {
-		if (Singleton == null) {
-			Singleton = this;
-			SceneManager.sceneUnloaded += SceneUnloaded;
-		} else {
-			Destroy (gameObject);
-		}
-	}
-
-	void SceneUnloaded (Scene arg0) {
-		if (Singleton == this) {
-			Singleton = null;
-		}
-		SceneManager.sceneUnloaded -= SceneUnloaded;
-	}
-
-	void OnApplicationQuit () {
-		if (Singleton == this) {
-			Singleton = null;
-		}
-	}
-		
-	void DropBall (Vector3 _position) {		
+	public void DropBall (Vector3 _position) {		
 		transform.position = _position;
 		rigid.velocity = Vector3.zero;
 		gameObject.SetActive (true);
