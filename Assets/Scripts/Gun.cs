@@ -75,6 +75,10 @@ public class Gun : NetworkBehaviour {
 		hitMask &= ~teamLayer;			
 	}
 
+	public void ResetFireRate () {
+		currentFireRateTime = fireRate;
+	}
+
 	[Command]
 	public void CmdFire () {
 		Debug.Log ("Try Fire");
@@ -103,7 +107,7 @@ public class Gun : NetworkBehaviour {
 			Reload ();
 		}
 	}
-
+		
 	protected virtual void Reload () {
 		//Play animation here
 		FinishedReloading ();	

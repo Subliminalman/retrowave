@@ -6,8 +6,6 @@ using UnityEngine.Networking;
 
 public class Player : TeamSetup {
 
-
-
 	public const int maxHealth = 100;
 
 	[SyncVar(hook = "OnChangeHealth")]
@@ -26,7 +24,12 @@ public class Player : TeamSetup {
 	[SerializeField] 
 	Gun gun;
 
+	[SerializeField]
+	Transform shootTransform;
+
 	public bool hasBall = false;
+	bool canFire = true;
+
 
 	protected override void Start () {
 		if (isLocalPlayer) {
@@ -47,8 +50,19 @@ public class Player : TeamSetup {
 			return;
 		}
 
+		if (!canFire) {
+			return;
+		}
+
 		if (Input.GetMouseButton(0)) {
-			gun.CmdFire ();
+			if (hasBall) {
+				//TODO: Set animation parameters
+				//TODO: If we have ball and die.... drop ball
+				ShootBall();
+
+			} else {				
+				gun.CmdFire ();
+			}
 		}			
 	}
 
@@ -81,10 +95,23 @@ public class Player : TeamSetup {
 		}
 	}
 
+	void ShootBall () {
+		hasBall = false;
+		canFire = false;
+		GameplayManager.Singleton.CmdShootBall (shootTransform.position + shootTransform.forward * 1.5f, shootTransform.forward);
+
+		StartCoroutine (WaitAndCanFire ());
+	}
+
+	IEnumerator WaitAndCanFire () {
+		yield return new WaitForSeconds (1f);
+		canFire = true;
+	}
+
 	[ClientRpc]
 	public void RpcGiveBall () {
 		//Put player into has ball state
-		GameplayManager.Singleton.CmdGiveBall(playerId);
+		GameplayManager.Singleton.CmdGiveBall (playerId);
 	}
 
 	[ClientRpc]
@@ -107,7 +134,7 @@ public class Player : TeamSetup {
 
 		if (isServer) {
 			currentAmmo = gun.MaxAmmo;
-			currentHealth = maxHealth;
+			currentHealth = maxHealth;		
 		}
 
 		if (isLocalPlayer) {

@@ -8,10 +8,24 @@ public class Ball : NetworkBehaviour {
 
 	[SerializeField]
 	float resetForce;
+	[SerializeField]
+	float shootForce;
 
 	Rigidbody rigid;
 	Renderer renderer;
 	Collider col;
+
+	void Awake () {
+		rigid = GetComponent<Rigidbody> ();
+	}
+
+	public void Shoot (Vector3 _position, Vector3 _rotation) {
+		gameObject.SetActive (true);
+		transform.position = _position;
+		transform.rotation = Quaternion.Euler (_rotation);
+		rigid.velocity = Vector3.zero;
+		rigid.AddForce (_rotation * shootForce);
+	}
 
 	public void DropBall (Vector3 _position) {		
 		transform.position = _position;

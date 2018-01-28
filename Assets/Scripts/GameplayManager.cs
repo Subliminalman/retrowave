@@ -27,7 +27,6 @@ public class GameplayManager : NetworkBehaviour {
 	public static GameplayManager Singleton;
 
 
-
 	void OnEnable () {
 		if (Singleton == null) {
 			Singleton = this;
@@ -59,8 +58,7 @@ public class GameplayManager : NetworkBehaviour {
 			waitGameTime -= Time.deltaTime;
 			if (waitGameTime <= 0f) {
 				currentGameState = GameState.Playing;
-			}
-
+			}				
 		} else if (currentGameState == GameState.Playing) {
 
 			currentGameTime -= Time.fixedDeltaTime;
@@ -73,6 +71,16 @@ public class GameplayManager : NetworkBehaviour {
 			
 			//TODO: Show some type of end game thing
 		}
+	}
+
+	[Command]
+	public void CmdShootBall (Vector3 _position, Vector3 _rotation) {
+
+		if (ball == null) {
+			Debug.LogError ("BALL IS NULL");
+			ball = Instantiate<Ball> (ballPrefab, Vector3.zero, Quaternion.identity);
+		}
+		ball.Shoot (_position, _rotation);
 	}
 
 	[Command]

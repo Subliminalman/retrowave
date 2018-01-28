@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetForce: 0
+  shootForce: 1000
 --- !u!114 &114235937964666540
 MonoBehaviour:
   m_ObjectHideFlags: 1
