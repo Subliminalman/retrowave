@@ -76,6 +76,16 @@ public class Player : NetworkBehaviour {
 	}
 
 	[ClientRpc]
+	public void RpcGiveBall () {
+		//Put player into has ball state
+	}
+
+	[ClientRpc]
+	public void RpcDropBall () {
+		//call ball to drop at player position
+	}
+
+	[ClientRpc]
 	void RpcRespawn () {
 		RpcSpawn (currentTeam);
 	}
