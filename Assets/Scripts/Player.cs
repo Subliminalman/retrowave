@@ -8,6 +8,7 @@ public class Player : NetworkBehaviour {
 
 
 	public bool destroyOnDeath;
+    [SyncVar]
 	public int currentTeam = 1;
 	public const int maxHealth = 100;
 
@@ -27,11 +28,13 @@ public class Player : NetworkBehaviour {
 
 	void Start () {
 		if (isLocalPlayer) {
-			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
+		    spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
 		}
 
-		RpcRespawn ();
+        if (NetworkServer.active) {
+		    RpcRespawn ();
+        }
 	}
 
 	void Update () {

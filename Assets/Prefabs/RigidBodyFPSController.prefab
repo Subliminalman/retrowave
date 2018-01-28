@@ -549,13 +549,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
   m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
+  m_SyncRotationAxis: 2
   m_RotationSyncCompression: 0
-  m_SyncSpin: 0
+  m_SyncSpin: 1
   m_MovementTheshold: 0.001
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 0
   m_InterpolateMovement: 1
 --- !u!114 &114322073918289516
 MonoBehaviour:
@@ -568,9 +568,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad40873ac6b94c64915d880a9f68d0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGunType: 1
+  currentGunType: 0
   fireOrigin: {fileID: 4937400726132688}
-  projectile: {fileID: 0}
+  projectile: {fileID: 114931141729050126, guid: 7917900e1273841c29b3978abf175815,
+    type: 2}
   damage: 1
   fireRate: 0.14
   reloadTime: 0.68
