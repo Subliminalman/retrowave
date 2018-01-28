@@ -73,12 +73,13 @@ public class GameplayManager : NetworkBehaviour {
 		}
 	}
 
-	[Command]
-	public void CmdShootBall (Vector3 _position, Vector3 _rotation) {
+    [Server]
+	public void ShootBall (Vector3 _position, Vector3 _rotation) {
 
 		if (ball == null) {
 			Debug.LogError ("BALL IS NULL");
 			ball = Instantiate<Ball> (ballPrefab, Vector3.zero, Quaternion.identity);
+            NetworkServer.Spawn (ball.gameObject);
 		}
 		ball.Shoot (_position, _rotation);
 	}
@@ -107,21 +108,24 @@ public class GameplayManager : NetworkBehaviour {
 	}
 
 	//Give ball only if the ball isn't possessed by another player
-	[Command]
-	public void CmdGiveBall (int _playerId) {	
+	[Server]
+	public void GiveBall (int _playerId) {	
 		if (ballPossessedByPlayer == -1) {	
 		 	ballPossessedByPlayer = _playerId;
+/*
 			Player[] players = FindObjectsOfType<Player> ();
 			for (int i = 0; i < players.Length; i++) {
 				if (players [i].playerId == _playerId) {
+                    // Synchronized to the clients
 					players [i].hasBall = true;
 				}
 			}
+*/
 		}
 	}
 
-	[Command]
-	public void CmdDropBall (Vector3 _position) {
+	[Server]
+	public void DropBall (Vector3 _position) {
 		ballPossessedByPlayer = -1;
 		ball.DropBall (_position);
 	}

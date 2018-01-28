@@ -27,7 +27,10 @@ public class Player : TeamSetup {
 	[SerializeField]
 	Transform shootTransform;
 
+    [SyncVar]
 	public bool hasBall = false;
+
+    [SyncVar]
 	bool canFire = true;
 
 
@@ -64,6 +67,12 @@ public class Player : TeamSetup {
 				gun.CmdFire ();
 			}
 		}			
+
+        if (Input.GetMouseButtonDown(1)) {
+            if (hasBall) {
+                DropBall ();
+            }
+        }
 	}
 
 	public void TakeDamage (int _amount) {
@@ -96,30 +105,56 @@ public class Player : TeamSetup {
 	}
 
 	void ShootBall () {
+        CmdShootBall ();
+        // Do this local so we don't try to shoot next update loop (server will sync the values back to us soon)
 		hasBall = false;
 		canFire = false;
-		GameplayManager.Singleton.CmdShootBall (shootTransform.position + shootTransform.forward * 1.5f, shootTransform.forward);
-
-		StartCoroutine (WaitAndCanFire ());
 	}
 
+    [Command] 
+    void CmdShootBall () {
+        if (!hasBall || !canFire) {
+            Debug.LogError ("Client is cheating!");
+            return;
+        }
+
+        // Synced version, server will set these on all remotes
+        hasBall = false;
+        canFire = false;
+
+		GameplayManager.Singleton.ShootBall (shootTransform.position + shootTransform.forward * 1.5f, shootTransform.forward);
+
+		StartCoroutine (WaitAndCanFire ());
+    }
+
+    [Server]
 	IEnumerator WaitAndCanFire () {
 		yield return new WaitForSeconds (1f);
 		canFire = true;
 	}
 
-	[ClientRpc]
-	public void RpcGiveBall () {
+    [Server]
+	public void GiveBall () {
 		//Put player into has ball state
-		GameplayManager.Singleton.CmdGiveBall (playerId);
+        hasBall = true;
+		GameplayManager.Singleton.GiveBall (playerId);
 	}
 
-	[ClientRpc]
-	public void RpcDropBall () {
+    private void DropBall () {
+        CmdDropBall ();
+        // Do this local so we don't try to shoot next update loop (server will sync the values back to us soon)
+        hasBall = false;
+    }
+
+	[Command] 
+	public void CmdDropBall () {
+        if (!hasBall) {
+            Debug.LogError ("Client is cheating!");
+            return;
+        }
 		//call ball to drop at player position
-		if (hasBall) {
-			GameplayManager.Singleton.CmdDropBall (transform.position);
-		}
+        hasBall = false;
+		GameplayManager.Singleton.DropBall (shootTransform.position + shootTransform.forward * 1.5f);
 	}
 
 	[ClientRpc]
