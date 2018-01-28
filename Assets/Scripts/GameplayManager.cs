@@ -112,15 +112,6 @@ public class GameplayManager : NetworkBehaviour {
 	public void GiveBall (int _playerId) {	
 		if (ballPossessedByPlayer == -1) {	
 		 	ballPossessedByPlayer = _playerId;
-/*
-			Player[] players = FindObjectsOfType<Player> ();
-			for (int i = 0; i < players.Length; i++) {
-				if (players [i].playerId == _playerId) {
-                    // Synchronized to the clients
-					players [i].hasBall = true;
-				}
-			}
-*/
 		}
 	}
 

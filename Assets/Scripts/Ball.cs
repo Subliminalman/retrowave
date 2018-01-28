@@ -18,7 +18,7 @@ public class Ball : NetworkBehaviour {
 	void Awake () {
 		rigid = GetComponent<Rigidbody> ();
 	}
-
+		
 	public void Shoot (Vector3 _position, Vector3 _rotation) {
         RpcShoot (_position, _rotation);
         LocalShoot (_position, _rotation);

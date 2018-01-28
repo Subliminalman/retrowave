@@ -38,6 +38,8 @@ public class Player : TeamSetup {
 		if (isLocalPlayer) {
 			spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
 			hud = FindObjectOfType<HUD> ();
+			//TEMP
+			playerId = Random.Range(0, 100000);
 		}
 
 		if (NetworkServer.active) {
@@ -61,6 +63,9 @@ public class Player : TeamSetup {
 			if (hasBall) {
 				//TODO: Set animation parameters
 				//TODO: If we have ball and die.... drop ball
+
+
+				Debug.Log ("SHOOT BALL");
 				ShootBall();
 
 			} else {				
@@ -173,7 +178,7 @@ public class Player : TeamSetup {
 		}
 
 		if (isLocalPlayer) {
-			Vector3 spawnPoint = Vector3.zero;
+			Vector3 spawnPoint = new Vector3 (0f, 0f, -5f);
 
 			if (spawnPoints != null && spawnPoints.Length > 0) {
 				spawnPoint = spawnPoints [_teamIndex].transform.position;
